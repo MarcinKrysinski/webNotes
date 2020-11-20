@@ -45,4 +45,13 @@ public class NotesController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteNote(@PathVariable Long id) {
+        boolean isDelete = notesService.deleteNote(id);
+        if (isDelete) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 }

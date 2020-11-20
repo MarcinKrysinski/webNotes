@@ -42,9 +42,13 @@ public class NotesServiceImpl implements NotesService {
     }
 
     @Override
-    public void deleteNote(Long id) {
-        notesRepo.deleteById(id);
+    public boolean deleteNote(Long id) {
+        Optional<Note> note = notesRepo.findById(id);
+        if (note.isPresent()){
+            notesRepo.deleteById(id);
+            return true;
+        }
+        return false;
     }
-
 
 }

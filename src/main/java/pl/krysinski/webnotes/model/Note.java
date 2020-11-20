@@ -16,10 +16,6 @@ public class Note {
     private String text;
     private String creationTime;
 
-    public Note(String text, String creationTime) {
-        this.text = text;
-        this.creationTime = creationTime;
-    }
 
     public Note(String text) {
         this.text = text;
