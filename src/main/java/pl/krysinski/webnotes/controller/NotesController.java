@@ -46,6 +46,11 @@ public class NotesController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @PostMapping
+    public ResponseEntity<Note> addNewNote(@RequestBody Note note){
+        return new ResponseEntity<>(notesService.saveNote(note), HttpStatus.CREATED);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity deleteNote(@PathVariable Long id) {
         boolean isDelete = notesService.deleteNote(id);

@@ -9,7 +9,7 @@ public interface NotesService {
 
     List<Note> findAllNotes();
 
-    void saveNote(Note note);
+    Note saveNote(Note note);
 
     boolean updateNote(Note newNote);
 
