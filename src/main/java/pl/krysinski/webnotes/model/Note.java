@@ -19,9 +19,12 @@ public class Note {
 
     public Note(String text) {
         this.text = text;
-        this.creationTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-
     }
+
+    public Note(Long id, String text) {
+        this.id = id;
+        this.text = text;
+        this.creationTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));    }
 
     public Note() {
     }
