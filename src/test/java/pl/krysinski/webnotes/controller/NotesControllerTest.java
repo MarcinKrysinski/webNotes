@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -71,9 +72,9 @@ class NotesControllerTest {
     @Test
     void should_get_note_by_id() throws Exception {
         //given
-        long noteId = 1L;
+        long noteId = 2L;
         String noteText = "Something to do for example nothing";
-        given(notesRepo.findById(noteId)).willReturn(Optional.of(prepareMockData().get(Math.toIntExact(noteId))));
+        given(notesRepo.findById(noteId)).willReturn(Optional.of(prepareMockData().get(Math.toIntExact(noteId-1))));
 
         //then
         mockMvc.perform(get("/notes/{id}", noteId))
@@ -86,8 +87,11 @@ class NotesControllerTest {
         //given
         long noteId = 1L;
         String noteText = "New text!!!";
-        String note = mapper.writeValueAsString(new Note(noteId, noteText));
+        Note objectNote = new Note(noteId, noteText);
+        String note = mapper.writeValueAsString(objectNote);
         given(notesRepo.findById(noteId)).willReturn(Optional.of(prepareMockData().get(Math.toIntExact(noteId))));
+
+
 
         //then
         mockMvc.perform(put("/notes/{id}", noteId).contentType(MediaType.APPLICATION_JSON).content(note))
@@ -102,6 +106,8 @@ class NotesControllerTest {
         Note objectNote = new Note(noteId, noteText);
         String note = mapper.writeValueAsString(objectNote);
         given(notesRepo.save(objectNote)).willReturn(objectNote);
+
+
 
         //then
         mockMvc.perform(post("/notes").contentType(MediaType.APPLICATION_JSON).content(note))
