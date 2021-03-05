@@ -3,8 +3,6 @@ package pl.krysinski.webnotes.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,19 +13,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import pl.krysinski.webnotes.model.Note;
 import pl.krysinski.webnotes.repository.NotesRepo;
-import pl.krysinski.webnotes.service.NotesService;
-import pl.krysinski.webnotes.service.NotesServiceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.hamcrest.Matchers.any;
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -74,7 +66,7 @@ class NotesControllerTest {
         //given
         long noteId = 2L;
         String noteText = "Something to do for example nothing";
-        given(notesRepo.findById(noteId)).willReturn(Optional.of(prepareMockData().get(Math.toIntExact(noteId-1))));
+        given(notesRepo.findById(noteId)).willReturn(Optional.of(prepareMockData().get(Math.toIntExact(noteId - 1))));
 
         //then
         mockMvc.perform(get("/notes/{id}", noteId))
@@ -92,7 +84,6 @@ class NotesControllerTest {
         given(notesRepo.findById(noteId)).willReturn(Optional.of(prepareMockData().get(Math.toIntExact(noteId))));
 
 
-
         //then
         mockMvc.perform(put("/notes/{id}", noteId).contentType(MediaType.APPLICATION_JSON).content(note))
                 .andExpect(status().isOk());
@@ -106,7 +97,6 @@ class NotesControllerTest {
         Note objectNote = new Note(noteId, noteText);
         String note = mapper.writeValueAsString(objectNote);
         given(notesRepo.save(objectNote)).willReturn(objectNote);
-
 
 
         //then

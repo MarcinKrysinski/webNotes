@@ -1,10 +1,7 @@
 package pl.krysinski.webnotes.service;
 
-import javassist.tools.rmi.ObjectNotFoundException;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.Assert;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import pl.krysinski.webnotes.model.Note;
 import pl.krysinski.webnotes.repository.NotesRepo;
@@ -30,10 +27,26 @@ class NotesServiceImplTest {
 
     @Test
     void should_save_note() {
+        //given
+        Note note = new Note(5L, "Some text");
+        NotesServiceImpl notesService = mock(NotesServiceImpl.class);
+        //when
+        when(notesService.saveNote(note)).thenReturn(mockSaveNote(note));
+        notesService.saveNote(note);
+        //then
+        verify(notesService, times(1)).saveNote(note);
     }
 
     @Test
     void should_update_note() {
+        //given
+        Note newNote = new Note(1L, "New text");
+        NotesServiceImpl notesService = mock(NotesServiceImpl.class);
+        //when
+        when(notesService.updateNote(newNote)).thenReturn(true);
+        notesService.updateNote(newNote);
+        //then
+        verify(notesService, times(1)).updateNote(any());
     }
 
     @Test
@@ -42,9 +55,9 @@ class NotesServiceImplTest {
         long noteId = 4L;
         NotesServiceImpl notesService = mock(NotesServiceImpl.class);
         //when
-        when(notesService.findNoteById(noteId)).thenReturn(Optional.of(prepareMockData().get(Math.toIntExact(noteId-1))));
+        when(notesService.findNoteById(noteId)).thenReturn(Optional.of(prepareMockData().get(Math.toIntExact(noteId - 1))));
         //then
-        MatcherAssert.assertThat(notesService.findNoteById(noteId).get().getText(), Matchers.hasToString("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.") );
+        MatcherAssert.assertThat(notesService.findNoteById(noteId).get().getText(), Matchers.hasToString("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."));
     }
 
     @Test
@@ -55,6 +68,7 @@ class NotesServiceImplTest {
         Note note = new Note(1L, "Lorem ipsum");
         given(notesRepo.findById(noteId)).willReturn(Optional.of(note));
 
+
         //when
         when(notesRepo.findById(noteId)).thenReturn(mockFindById(noteId));
         notesRepo.deleteById(3L);
@@ -63,10 +77,11 @@ class NotesServiceImplTest {
         MatcherAssert.assertThat(notesRepo.findById(noteId).get().getText(), Matchers.hasToString("Lorem ipsum"));
         verify(notesRepo, times(1)).deleteById(anyLong());
 
-
-
     }
+
+
     List<Note> notes = new ArrayList<>();
+
     private List<Note> prepareMockData() {
         notes.add(new Note(1L, "Lorem ipsum"));
         notes.add(new Note(2L, "Something to do for example nothing"));
@@ -77,16 +92,13 @@ class NotesServiceImplTest {
         return notes;
     }
 
+
     private Optional<Note> mockFindById(Long id) {
         prepareMockData();
         return Optional.ofNullable(notes.get(Integer.parseInt(String.valueOf(id - 1))));
     }
 
-    private Boolean prepareMockDataWithDelete(Long id) {
-        Optional<Note> note = mockFindById(id);
-        if (note.isPresent()){
-            return false;
-        }
-        return true;
+    private Note mockSaveNote(Note note) {
+        return note;
     }
 }
